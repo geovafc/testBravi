@@ -1,0 +1,54 @@
+<div class="example-container mat-elevation-z8">
+  <div class="button-row">
+    <form [formGroup]="formWeather" (ngSubmit)="getCurrentWeatherByCityName()">
+      <mat-form-field>
+        <input matInput formControlName="city" ngModel  placeholder="Filter Weather by City " [(ngModel)]="cityName">
+        <div *ngIf="!city.pristine && city.errors">
+          <p *ngIf="city.errors.required">
+            City name is required.
+          </p>
+          <p *ngIf="city.errors.minlength">
+            City name must be at least 3 letters.
+          </p>
+          <p *ngIf="city.errors.maxlength">
+            City name must have a maximum of 100 letters.
+          </p>
+          <p *ngIf="city.errors.pattern">
+            City name not must have number.
+          </p>
+        </div>
+      </mat-form-field>
+      <button mat-flat-button color="accent"  [disabled]="!formWeather.valid" ><mat-icon>search</mat-icon>Search</button>
+    </form>
+  </div>
+  <div class="example-loading-shade"
+  >
+<mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+</div>
+<p *ngIf="isShowError">
+  {{errorMessage}}
+</p>
+<div>
+
+</div>
+  <mat-card *ngIf="isShowResult" class="example-card">
+    <mat-card-header>
+      <mat-card-title><h2>Weather in {{cityName}}</h2></mat-card-title>
+      <mat-card-subtitle>{{climate.main.temp}}  ºC</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <dl>
+        <div *ngFor="let item of climate.weather">
+          <dd><h3>{{item.description}}</h3></dd>
+      </div>
+        <dd>Wind: {{climate.wind.speed}} m/s</dd>
+        <dd>Pressure:  {{climate.main.pressure}} hpa</dd>
+        <dd>Humidity:  {{climate.main.humidity}} %</dd>
+        <dd>Sunrise:  {{sunrise}}</dd>
+        <dd>Sunset:  {{sunset}}</dd>
+        <dd>Geo coords:  Lat = {{climate.coord.lat}} , Lon = {{climate.coord.lon}}  </dd>
+
+      </dl>
+    </mat-card-content>
+  </mat-card>
+</div>
